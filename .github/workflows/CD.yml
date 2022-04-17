@@ -15,7 +15,7 @@ on:
         required: true
 jobs:
   deploy:
-    name: CD
+    name: Deploy on Kubernetes Cluster
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to cluster
