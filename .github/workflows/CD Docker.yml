@@ -28,3 +28,5 @@ jobs:
             ${{secrets.BUILD_ARGS}}
           push: true
           tags: ghcr.io/${{ env.IMAGE_REPOSITORY }}:main
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
