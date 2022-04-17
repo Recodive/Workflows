@@ -1,5 +1,21 @@
 on:
   workflow_call:
+    inputs:
+      context:
+        description: Docker context
+        default: .
+        required: false
+        type: string
+      tags:
+        description: Docker Image tags
+        required: false
+        default: ""
+        type: string
+      version:
+        description: Docker Image version
+        required: false
+        default: main
+        type: string
     secrets:
       GH_NPM_TOKEN:
         description: GitHub NPM Token used to push the image
@@ -22,14 +38,20 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - run: echo IMAGE_REPOSITORY=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
+      - name: Set IMAGE_REPOSITORY env
+        if: inputs.tags == ""
+        run: echo IMAGE_REPOSITORY=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
+      - name: Set IMAGE_REPOSITORY env
+        if: inputs.tags != ""
+        run: echo IMAGE_REPOSITORY=${{ inputs.tags }}
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
+          context: ${{ inputs.context }}
           build-args: |
             "GH_NPM_TOKEN=${{ secrets.GH_NPM_TOKEN }}"
             ${{secrets.BUILD_ARGS}}
           push: true
-          tags: ghcr.io/${{ env.IMAGE_REPOSITORY }}:main
+          tags: ghcr.io/${{ env.IMAGE_REPOSITORY }}:${{ inputs.version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
