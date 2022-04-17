@@ -9,7 +9,7 @@ on:
       tags:
         description: Docker Image tags
         required: false
-        default: ''
+        default: ""
         type: string
       version:
         description: Docker Image version
@@ -43,7 +43,7 @@ jobs:
         run: echo IMAGE_REPOSITORY=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
       - name: Set IMAGE_REPOSITORY env
         if: inputs.tags != ''
-        run: echo IMAGE_REPOSITORY=${{ inputs.tags }}
+        run: echo IMAGE_REPOSITORY=${{ inputs.tags }} >> $GITHUB_ENV
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
