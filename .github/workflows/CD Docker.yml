@@ -9,7 +9,7 @@ on:
       tags:
         description: Docker Image tags
         required: false
-        default: ""
+        default: ''
         type: string
       version:
         description: Docker Image version
