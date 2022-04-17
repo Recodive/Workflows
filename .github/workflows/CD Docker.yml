@@ -39,10 +39,10 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Set IMAGE_REPOSITORY env
-        if: inputs.tags == ""
+        if: inputs.tags == ''
         run: echo IMAGE_REPOSITORY=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
       - name: Set IMAGE_REPOSITORY env
-        if: inputs.tags != ""
+        if: inputs.tags != ''
         run: echo IMAGE_REPOSITORY=${{ inputs.tags }}
       - name: Build and push
         uses: docker/build-push-action@v2
