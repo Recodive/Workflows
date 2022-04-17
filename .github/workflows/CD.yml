@@ -1,0 +1,25 @@
+on:
+  workflow_call:
+    secrets:
+      KUBE_CONFIG_DATA:
+        description: Kubernetes Config
+        required: true
+    inputs:
+      namespace:
+        description: Namespace of the deployment
+        type: string
+        required: true
+      deployment:
+        description: Name of the deployment
+        type: string
+        required: true
+jobs:
+  deploy:
+    name: CD
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to cluster
+        uses: steebchen/kubectl@v2.0.0
+        with:
+          config: ${{ secrets.KUBE_CONFIG_DATA }}
+          command: rollout restart -n ${{ inputs.namespace }} deployment/${{ inputs.deployment }}
