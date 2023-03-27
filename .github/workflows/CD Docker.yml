@@ -6,6 +6,11 @@ on:
         default: .
         required: false
         type: string
+      file:
+        description: Docker context
+        default: ./Dockerfile
+        required: false
+        type: string
       tags:
         description: Docker Image tags
         required: false
@@ -47,6 +52,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
+          file: ${{ inputs.file  }}
           context: ${{ inputs.context }}
           build-args: |
             "GH_NPM_TOKEN=${{ secrets.GH_NPM_TOKEN }}"
