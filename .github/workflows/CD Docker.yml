@@ -32,6 +32,12 @@ jobs:
   docker:
     name: Build Image
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -59,5 +65,6 @@ jobs:
             ${{secrets.BUILD_ARGS}}
           push: true
           tags: ghcr.io/${{ env.IMAGE_REPOSITORY }}:${{ inputs.version }}
+          platforms: ${{ matrix.platform }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
